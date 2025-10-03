@@ -69,6 +69,7 @@ button { margin: 5px; }
 <button onclick="exportCSV()">Exporter CSV</button>
 <button onclick="exportJSON()">Exporter JSON</button>
 <button onclick="resetCoefficients()">Reset coefficients</button>
+<button onclick="resetDistances()">Reset Distance</button>
 
 <div id="chartContainer">
     <canvas id="co2Chart"></canvas>
@@ -147,6 +148,15 @@ function resetCoefficients(){
         row.cells[1].getElementsByTagName("input")[0].value=defaultFactors[key];
     });
     updateTable();
+}
+
+function resetDistances() {
+    document.querySelectorAll("#transportTable tbody tr").forEach(row => {
+        // La distance est dans la 3ème cellule (index 2)
+        const distanceInput = row.cells[2].getElementsByTagName("input")[0];
+        distanceInput.value = 0;
+    });
+    updateTable(); // recalculer les usages et le total
 }
 
 function updateChart(labels, data){
