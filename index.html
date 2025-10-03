@@ -29,7 +29,20 @@ button { margin: 5px; }
     <option value="it">Italiano</option>
     <option value="es">Español</option>
     <option value="pt">Português</option>
+    <option value="zh">中文</option>
+    <option value="ja">日本語</option>
+    <option value="ar">العربية</option>
+    <option value="ru">Русский</option>
+    <option value="fi">Suomi</option>
+    <option value="sv">Svenska</option>
+    <option value="hi">हिन्दी</option>
+    <option value="bn">বাংলা</option>
+    <option value="id">Bahasa Indonesia</option>
+    <option value="tr">Türkçe</option>
 </select>
+
+
+
 
 
 <label for="darkSwitch" id="labelDark">Mode sombre :</label>
@@ -177,6 +190,189 @@ const translations = {
 		'Réinitialiser les coefficients':'Redefinir coeficientes', 'Réinitialiser la distance':'Redefinir distância',
 		'Afficher/Masquer Construction':'Mostrar/Ocultar construção',
 		'Langue :':'Idioma:', 'Mode sombre :':'Modo escuro:'
+	},
+	zh: {
+		pageTitle: "碳足迹",
+		colTransport: "交通方式",
+		colCoeff: "使用系数",
+		colDistance: "距离 (公里)",
+		colUsage: "使用² (千克二氧化碳)",
+		colConstruction: "建造 (千克二氧化碳)",
+		'Voiture essence':'汽油车', 'Voiture diesel':'柴油车', 'TGV':'高速列车',
+		'Intercité':'城际列车', 'RER/Transilien':'市郊列车', 'Autocar thermique':'柴油长途汽车',
+		'Covoiturage électrique':'电动拼车', 'Covoiturage thermique':'燃油拼车',
+		'Moto thermique':'燃油摩托车', 'Scooter ou moto légère thermique':'燃油轻便摩托车',
+		'Avion court-courrier':'短途航班', 'Avion long-courrier':'长途航班',
+		'Vélo':'自行车', 'Vélo électrique':'电动自行车', 'Trottinette':'滑板车', 'Trottinette électrique':'电动滑板车', 'Tram':'有轨电车',
+		'Exporter CSV':'导出 CSV', 'Exporter JSON':'导出 JSON',
+		'Réinitialiser les coefficients':'重置系数', 'Réinitialiser la distance':'重置距离',
+		'Afficher/Masquer Construction':'显示/隐藏建造',
+		'Langue :':'语言:', 'Mode sombre :':'深色模式:'
+	},
+	ja: {
+		pageTitle: "カーボンフットプリント",
+		colTransport: "交通手段",
+		colCoeff: "使用係数",
+		colDistance: "距離 (km)",
+		colUsage: "使用² (kg CO₂)",
+		colConstruction: "建設 (kg CO₂)",
+		'Voiture essence':'ガソリン車', 'Voiture diesel':'ディーゼル車', 'TGV':'高速鉄道',
+		'Intercité':'都市間列車', 'RER/Transilien':'通勤列車', 'Autocar thermique':'ディーゼルバス',
+		'Covoiturage électrique':'電気カープール', 'Covoiturage thermique':'ガソリンカープール',
+		'Moto thermique':'ガソリンバイク', 'Scooter ou moto légère thermique':'ガソリンスクーター/軽二輪',
+		'Avion court-courrier':'短距離便', 'Avion long-courrier':'長距離便',
+		'Vélo':'自転車', 'Vélo électrique':'電動自転車', 'Trottinette':'キックスケーター', 'Trottinette électrique':'電動キックスケーター', 'Tram':'路面電車',
+		'Exporter CSV':'CSVエクスポート', 'Exporter JSON':'JSONエクスポート',
+		'Réinitialiser les coefficients':'係数をリセット', 'Réinitialiser la distance':'距離をリセット',
+		'Afficher/Masquer Construction':'建設の表示/非表示',
+		'Langue :':'言語:', 'Mode sombre :':'ダークモード:'
+	},
+	ar: {
+		pageTitle: "البصمة الكربونية",
+		colTransport: "وسيلة النقل",
+		colCoeff: "معامل الاستخدام",
+		colDistance: "المسافة (كم)",
+		colUsage: "الاستخدام² (كغ CO₂)",
+		colConstruction: "الإنشاء (كغ CO₂)",
+		'Voiture essence':'سيارة بنزين', 'Voiture diesel':'سيارة ديزل', 'TGV':'قطار فائق السرعة',
+		'Intercité':'قطار بين المدن', 'RER/Transilien':'قطار ضواحي', 'Autocar thermique':'حافلة ديزل',
+		'Covoiturage électrique':'مشاركة سيارة كهربائية', 'Covoiturage thermique':'مشاركة سيارة حرارية',
+		'Moto thermique':'دراجة نارية حرارية', 'Scooter ou moto légère thermique':'سكوتر / دراجة خفيفة حرارية',
+		'Avion court-courrier':'رحلة قصيرة', 'Avion long-courrier':'رحلة طويلة',
+		'Vélo':'دراجة هوائية', 'Vélo électrique':'دراجة كهربائية', 'Trottinette':'سكوتر', 'Trottinette électrique':'سكوتر كهربائي', 'Tram':'ترام',
+		'Exporter CSV':'تصدير CSV', 'Exporter JSON':'تصدير JSON',
+		'Réinitialiser les coefficients':'إعادة تعيين المعاملات', 'Réinitialiser la distance':'إعادة تعيين المسافة',
+		'Afficher/Masquer Construction':'إظهار/إخفاء الإنشاء',
+		'Langue :':'اللغة:', 'Mode sombre :':'الوضع الداكن:'
+	},
+	ru: {
+		pageTitle: "Углеродный след",
+		colTransport: "Транспорт",
+		colCoeff: "Коэффициент использования",
+		colDistance: "Расстояние (км)",
+		colUsage: "Использование² (кг CO₂)",
+		colConstruction: "Строительство (кг CO₂)",
+		'Voiture essence':'Бензиновый автомобиль', 'Voiture diesel':'Дизельный автомобиль', 'TGV':'Скоростной поезд',
+		'Intercité':'Междугородный поезд', 'RER/Transilien':'Пригородный поезд', 'Autocar thermique':'Дизельный автобус',
+		'Covoiturage électrique':'Электрокарпул', 'Covoiturage thermique':'Карпул на ДВС',
+		'Moto thermique':'Мотоцикл (ДВС)', 'Scooter ou moto légère thermique':'Скутер/лёгкий мотоцикл (ДВС)',
+		'Avion court-courrier':'Короткий перелёт', 'Avion long-courrier':'Дальний перелёт',
+		'Vélo':'Велосипед', 'Vélo électrique':'Электровелосипед', 'Trottinette':'Самокат', 'Trottinette électrique':'Электросамокат', 'Tram':'Трамвай',
+		'Exporter CSV':'Экспорт CSV', 'Exporter JSON':'Экспорт JSON',
+		'Réinitialiser les coefficients':'Сброс коэффициентов', 'Réinitialiser la distance':'Сброс расстояния',
+		'Afficher/Masquer Construction':'Показать/Скрыть строительство',
+		'Langue :':'Язык:', 'Mode sombre :':'Тёмный режим:'
+	},
+	fi: {
+		pageTitle: "Hiilijalanjälki",
+		colTransport: "Liikkumistapa",
+		colCoeff: "Käyttökerroin",
+		colDistance: "Etäisyys (km)",
+		colUsage: "Käyttö² (kg CO₂)",
+		colConstruction: "Rakentaminen (kg CO₂)",
+		'Voiture essence':'Bensiiniauto', 'Voiture diesel':'Dieselauto', 'TGV':'Suurnopeusjuna',
+		'Intercité':'Kaukojuna', 'RER/Transilien':'Lähijuna', 'Autocar thermique':'Dieselbussi',
+		'Covoiturage électrique':'Sähkö kimppakyyti', 'Covoiturage thermique':'Polttomoottori kimppakyyti',
+		'Moto thermique':'Polttomoottoripyörä', 'Scooter ou moto légère thermique':'Kevyt polttomoottoriskootteri',
+		'Avion court-courrier':'Lyhyen matkan lento', 'Avion long-courrier':'Pitkän matkan lento',
+		'Vélo':'Polkupyörä', 'Vélo électrique':'Sähköpyörä', 'Trottinette':'Potkulauta', 'Trottinette électrique':'Sähköpotkulauta', 'Tram':'Raitiovaunu',
+		'Exporter CSV':'Vie CSV', 'Exporter JSON':'Vie JSON',
+		'Réinitialiser les coefficients':'Palauta kertoimet', 'Réinitialiser la distance':'Palauta etäisyys',
+		'Afficher/Masquer Construction':'Näytä/Piilota rakentaminen',
+		'Langue :':'Kieli:', 'Mode sombre :':'Tumma tila:'
+	},
+	sv: {
+		pageTitle: "Koldioxidavtryck",
+		colTransport: "Transportmedel",
+		colCoeff: "Användningskoefficient",
+		colDistance: "Avstånd (km)",
+		colUsage: "Användning² (kg CO₂)",
+		colConstruction: "Byggnation (kg CO₂)",
+		'Voiture essence':'Bensinbil', 'Voiture diesel':'Dieselbil', 'TGV':'Höghastighetståg',
+		'Intercité':'Intercitytåg', 'RER/Transilien':'Pendeltåg', 'Autocar thermique':'Dieselbuss',
+		'Covoiturage électrique':'Elbilssamåkning', 'Covoiturage thermique':'Bränslebilssamåkning',
+		'Moto thermique':'Motorcykel (bränsle)', 'Scooter ou moto légère thermique':'Skoter/lätt motorcykel (bränsle)',
+		'Avion court-courrier':'Kortdistansflyg', 'Avion long-courrier':'Långdistansflyg',
+		'Vélo':'Cykel', 'Vélo électrique':'Elcykel', 'Trottinette':'Sparkcykel', 'Trottinette électrique':'Elsparkcykel', 'Tram':'Spårvagn',
+		'Exporter CSV':'Exportera CSV', 'Exporter JSON':'Exportera JSON',
+		'Réinitialiser les coefficients':'Återställ koefficienter', 'Réinitialiser la distance':'Återställ avstånd',
+		'Afficher/Masquer Construction':'Visa/Dölj byggnation',
+		'Langue :':'Språk:', 'Mode sombre :':'Mörkt läge:'
+	},
+	hi: {
+		pageTitle: "कार्बन पदचिह्न",
+		colTransport: "परिवहन",
+		colCoeff: "उपयोग गुणांक",
+		colDistance: "दूरी (किमी)",
+		colUsage: "उपयोग² (किग्रा CO₂)",
+		colConstruction: "निर्माण (किग्रा CO₂)",
+		'Voiture essence':'पेट्रोल कार', 'Voiture diesel':'डीजल कार', 'TGV':'टीजीवी',
+		'Intercité':'इंटरसिटी', 'RER/Transilien':'रेल/कम्यूटर ट्रेन', 'Autocar thermique':'थर्मल बस',
+		'Covoiturage électrique':'इलेक्ट्रिक कारपूल', 'Covoiturage thermique':'थर्मल कारपूल',
+		'Moto thermique':'थर्मल मोटरसाइकिल', 'Scooter ou moto légère thermique':'थर्मल स्कूटर/हल्की मोटरसाइकिल',
+		'Avion court-courrier':'लघु-दूरी विमान', 'Avion long-courrier':'लंबी-दूरी विमान',
+		'Vélo':'साइकिल', 'Vélo électrique':'इलेक्ट्रिक साइकिल', 'Trottinette':'स्कूटर', 'Trottinette électrique':'इलेक्ट्रिक स्कूटर', 'Tram':'ट्राम',
+		'Exporter CSV':'CSV निर्यात करें', 'Exporter JSON':'JSON निर्यात करें',
+		'Réinitialiser les coefficients':'गुणांक रीसेट करें', 'Réinitialiser la distance':'दूरी रीसेट करें',
+		'Afficher/Masquer Construction':'निर्माण दिखाएँ/छिपाएँ',
+		'Langue :':'भाषा:', 'Mode sombre :':'डार्क मोड:'
+	},
+	
+	bn: {
+		pageTitle: "কার্বন পদচিহ্ন",
+		colTransport: "পরিবহন",
+		colCoeff: "ব্যবহারের সহগ",
+		colDistance: "দূরত্ব (কিমি)",
+		colUsage: "ব্যবহার² (কেজি CO₂)",
+		colConstruction: "নির্মাণ (কেজি CO₂)",
+		'Voiture essence':'পেট্রোল গাড়ি', 'Voiture diesel':'ডিজেল গাড়ি', 'TGV':'টিজিভি',
+		'Intercité':'ইন্টারসিটি', 'RER/Transilien':'কমিউটার ট্রেন', 'Autocar thermique':'থার্মাল বাস',
+		'Covoiturage électrique':'ইলেকট্রিক কারপুল', 'Covoiturage thermique':'থার্মাল কারপুল',
+		'Moto thermique':'থার্মাল মোটরসাইকেল', 'Scooter ou moto légère thermique':'থার্মাল স্কুটার/হালকা মোটরসাইকেল',
+		'Avion court-courrier':'স্বল্প দূরত্বের ফ্লাইট', 'Avion long-courrier':'দীর্ঘ দূরত্বের ফ্লাইট',
+		'Vélo':'সাইকেল', 'Vélo électrique':'ইলেকট্রিক সাইকেল', 'Trottinette':'স্কুটার', 'Trottinette électrique':'ইলেকট্রিক স্কুটার', 'Tram':'ট্রাম',
+		'Exporter CSV':'CSV রপ্তানি করুন', 'Exporter JSON':'JSON রপ্তানি করুন',
+		'Réinitialiser les coefficients':'সহগ রিসেট করুন', 'Réinitialiser la distance':'দূরত্ব রিসেট করুন',
+		'Afficher/Masquer Construction':'নির্মাণ দেখান/লুকান',
+		'Langue :':'ভাষা:', 'Mode sombre :':'ডার্ক মোড:'
+	},
+	
+	id: {
+		pageTitle: "Jejak Karbon",
+		colTransport: "Transportasi",
+		colCoeff: "Koefisien penggunaan",
+		colDistance: "Jarak (km)",
+		colUsage: "Penggunaan² (kg CO₂)",
+		colConstruction: "Konstruksi (kg CO₂)",
+		'Voiture essence':'Mobil bensin', 'Voiture diesel':'Mobil diesel', 'TGV':'TGV',
+		'Intercité':'Kereta antar kota', 'RER/Transilien':'Kereta komuter', 'Autocar thermique':'Bus termal',
+		'Covoiturage électrique':'Carpool listrik', 'Covoiturage thermique':'Carpool termal',
+		'Moto thermique':'Motor termal', 'Scooter ou moto légère thermique':'Skuter/motor ringan termal',
+		'Avion court-courrier':'Penerbangan jarak dekat', 'Avion long-courrier':'Penerbangan jarak jauh',
+		'Vélo':'Sepeda', 'Vélo électrique':'Sepeda listrik', 'Trottinette':'Skuter', 'Trottinette électrique':'Skuter listrik', 'Tram':'Trem',
+		'Exporter CSV':'Ekspor CSV', 'Exporter JSON':'Ekspor JSON',
+		'Réinitialiser les coefficients':'Reset koefisien', 'Réinitialiser la distance':'Reset jarak',
+		'Afficher/Masquer Construction':'Tampilkan/Sembunyikan Konstruksi',
+		'Langue :':'Bahasa:', 'Mode sombre :':'Mode gelap:'
+	},
+	
+	tr: {
+		pageTitle: "Karbon Ayak İzi",
+		colTransport: "Ulaşım",
+		colCoeff: "Kullanım katsayısı",
+		colDistance: "Mesafe (km)",
+		colUsage: "Kullanım² (kg CO₂)",
+		colConstruction: "İnşaat (kg CO₂)",
+		'Voiture essence':'Benzinli araba', 'Voiture diesel':'Dizel araba', 'TGV':'TGV',
+		'Intercité':'Şehirlerarası tren', 'RER/Transilien':'Banliyö treni', 'Autocar thermique':'Termal otobüs',
+		'Covoiturage électrique':'Elektrikli ortak araç', 'Covoiturage thermique':'Termal ortak araç',
+		'Moto thermique':'Termal motosiklet', 'Scooter ou moto légère thermique':'Termal scooter/hafif motosiklet',
+		'Avion court-courrier':'Kısa mesafe uçuş', 'Avion long-courrier':'Uzun mesafe uçuş',
+		'Vélo':'Bisiklet', 'Vélo électrique':'Elektrikli bisiklet', 'Trottinette':'Scooter', 'Trottinette électrique':'Elektrikli scooter', 'Tram':'Tramvay',
+		'Exporter CSV':'CSV Dışa Aktar', 'Exporter JSON':'JSON Dışa Aktar',
+		'Réinitialiser les coefficients':'Katsayıları sıfırla', 'Réinitialiser la distance':'Mesafeleri sıfırla',
+		'Afficher/Masquer Construction':'İnşaatı Göster/Gizle',
+		'Langue :':'Dil:', 'Mode sombre :':'Karanlık mod:'
 	},
     fr: {} // français par défaut
 };
