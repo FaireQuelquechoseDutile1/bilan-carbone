@@ -6,43 +6,15 @@
 <title>Bilan Carbone</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f5f5f5;
-    color: #333;
-}
-.dark-mode {
-    background-color: #1e1e1e;
-    color: #f5f5f5;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-th, td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-}
-th {
-    background-color: #eee;
-}
-.dark-mode th {
-    background-color: #333;
-}
-input[type="number"] {
-    width: 80px;
-}
-button {
-    margin: 5px;
-}
-#chartContainer {
-    width: 100%;
-    max-width: 800px;
-    margin: auto;
-}
+body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; color: #333; }
+.dark-mode { background-color: #1e1e1e; color: #f5f5f5; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+th { background-color: #eee; }
+.dark-mode th { background-color: #333; }
+input[type="number"] { width: 80px; }
+button { margin: 5px; }
+#chartContainer { width: 100%; max-width: 800px; margin: auto; height: 400px; }
 </style>
 </head>
 <body>
@@ -62,224 +34,190 @@ button {
 <thead>
 <tr>
     <th>Transport</th>
+    <th>Coefficient d'usage</th>
     <th>Distance (km)</th>
     <th>Usage² (kg CO₂)</th>
     <th>Construction (kg CO₂)</th>
 </tr>
 </thead>
 <tbody>
-<tr data-key="voiture_essence"><td>Voiture essence</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>500</td></tr>
-<tr data-key="voiture_diesel"><td>Voiture diesel</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>520</td></tr>
-<tr data-key="tgv"><td>TGV</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>50</td></tr>
-<tr data-key="intercite"><td>Intercité</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>45</td></tr>
-<tr data-key="rer_transilien"><td>RER/Transilien</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>30</td></tr>
-<tr data-key="autocar_thermique"><td>Autocar thermique</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>40</td></tr>
-<tr data-key="covoiturage_electrique"><td>Covoiturage électrique</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>50</td></tr>
-<tr data-key="covoiturage_thermique"><td>Covoiturage thermique</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>500</td></tr>
-<tr data-key="moto_thermique"><td>Moto thermique</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>30</td></tr>
-<tr data-key="scooter_thermique"><td>Scooter ou moto légère thermique</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>20</td></tr>
-<tr data-key="avion_court"><td>Avion court-courrier</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>150</td></tr>
-<tr data-key="avion_long"><td>Avion long-courrier</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>250</td></tr>
-<tr data-key="velo"><td>Vélo</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>10</td></tr>
-<tr data-key="velo_electrique"><td>Vélo électrique</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>20</td></tr>
-<tr data-key="trottinette"><td>Trottinette</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>5</td></tr>
-<tr data-key="trottinette_electrique"><td>Trottinette électrique</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>15</td></tr>
-<tr data-key="tram"><td>Tram</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>30</td></tr>
+<tr data-key="voiture_essence"><td>Voiture essence</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>500</td></tr>
+<tr data-key="voiture_diesel"><td>Voiture diesel</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>520</td></tr>
+<tr data-key="tgv"><td>TGV</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>50</td></tr>
+<tr data-key="intercite"><td>Intercité</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>45</td></tr>
+<tr data-key="rer_transilien"><td>RER/Transilien</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>30</td></tr>
+<tr data-key="autocar_thermique"><td>Autocar thermique</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>40</td></tr>
+<tr data-key="covoiturage_electrique"><td>Covoiturage électrique</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>50</td></tr>
+<tr data-key="covoiturage_thermique"><td>Covoiturage thermique</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>500</td></tr>
+<tr data-key="moto_thermique"><td>Moto thermique</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>30</td></tr>
+<tr data-key="scooter_thermique"><td>Scooter ou moto légère thermique</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>20</td></tr>
+<tr data-key="avion_court"><td>Avion court-courrier</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>150</td></tr>
+<tr data-key="avion_long"><td>Avion long-courrier</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>250</td></tr>
+<tr data-key="velo"><td>Vélo</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>10</td></tr>
+<tr data-key="velo_electrique"><td>Vélo électrique</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>20</td></tr>
+<tr data-key="trottinette"><td>Trottinette</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>5</td></tr>
+<tr data-key="trottinette_electrique"><td>Trottinette électrique</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>15</td></tr>
+<tr data-key="tram"><td>Tram</td><td><input type="number" step="0.01" onchange="updateTable()"></td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>30</td></tr>
 </tbody>
 <tfoot>
 <tr>
-    <th>Total</th><th></th><th id="totalUsage">0</th><th id="totalConstruction">0</th>
+    <th>Total</th><th></th><th></th><th id="totalUsage">0</th><th id="totalConstruction">0</th>
 </tr>
 </tfoot>
 </table>
 
 <button onclick="exportCSV()">Exporter CSV</button>
 <button onclick="exportJSON()">Exporter JSON</button>
+<button onclick="resetCoefficients()">Reset coefficients</button>
 
 <div id="chartContainer">
     <canvas id="co2Chart"></canvas>
 </div>
 
 <script>
-const factors = {
-    'voiture_essence': 0.192,
-    'voiture_diesel': 0.171,
-    'tgv': 0.08,
-    'intercite': 0.07,
-    'rer_transilien': 0.05,
-    'autocar_thermique': 0.1,
-    'covoiturage_electrique': 0.02,
-    'covoiturage_thermique': 0.1,
-    'moto_thermique': 0.12,
-    'scooter_thermique': 0.08,
-    'avion_court': 0.255,
-    'avion_long': 0.195,
-    'velo': 0,
-    'velo_electrique': 0.01,
-    'trottinette': 0,
-    'trottinette_electrique': 0.01,
-    'tram': 0.03
+// Facteurs par défaut
+const defaultFactors = {
+    'voiture_essence': 0.192, 'voiture_diesel': 0.171, 'tgv': 0.08, 'intercite': 0.07,
+    'rer_transilien': 0.05, 'autocar_thermique': 0.1, 'covoiturage_electrique': 0.02,
+    'covoiturage_thermique': 0.1, 'moto_thermique': 0.12, 'scooter_thermique': 0.08,
+    'avion_court': 0.255, 'avion_long': 0.195, 'velo': 0, 'velo_electrique': 0.01,
+    'trottinette': 0, 'trottinette_electrique': 0.01, 'tram': 0.03
 };
 
+// Traductions FR/EN
 const translations = {
     en: {
-        'voiture_essence':'Gasoline car',
-        'voiture_diesel':'Diesel car',
-        'tgv':'TGV',
-        'intercite':'Intercity train',
-        'rer_transilien':'RER/Commuter train',
-        'autocar_thermique':'Coach bus',
-        'covoiturage_electrique':'Electric carpool',
-        'covoiturage_thermique':'Thermal carpool',
-        'moto_thermique':'Motorbike',
-        'scooter_thermique':'Scooter/light motorcycle',
-        'avion_court':'Short-haul flight',
-        'avion_long':'Long-haul flight',
-        'velo':'Bicycle',
-        'velo_electrique':'Electric bike',
-        'trottinette':'Scooter',
-        'trottinette_electrique':'Electric scooter',
-        'tram':'Tram'
+        'Voiture essence':'Gasoline car', 'Voiture diesel':'Diesel car', 'TGV':'TGV',
+        'Intercité':'Intercity train', 'RER/Transilien':'RER/Commuter train',
+        'Autocar thermique':'Coach bus', 'Covoiturage électrique':'Electric carpool',
+        'Covoiturage thermique':'Thermal carpool', 'Moto thermique':'Motorbike',
+        'Scooter ou moto légère thermique':'Scooter/light motorcycle',
+        'Avion court-courrier':'Short-haul flight', 'Avion long-courrier':'Long-haul flight',
+        'Vélo':'Bicycle', 'Vélo électrique':'Electric bike',
+        'Trottinette':'Scooter', 'Trottinette électrique':'Electric scooter',
+        'Tram':'Tram', 'Distance (km)':'Distance (km)', "Usage² (kg CO₂)":"Usage² (kg CO₂)",
+        "Construction (kg CO₂)":"Construction (kg CO₂)", "Coefficient d'usage":"Usage coefficient", "Total":"Total"
     },
-    fr: {
-        'voiture_essence':'Voiture essence',
-        'voiture_diesel':'Voiture diesel',
-        'tgv':'TGV',
-        'intercite':'Intercité',
-        'rer_transilien':'RER/Transilien',
-        'autocar_thermique':'Autocar thermique',
-        'covoiturage_electrique':'Covoiturage électrique',
-        'covoiturage_thermique':'Covoiturage thermique',
-        'moto_thermique':'Moto thermique',
-        'scooter_thermique':'Scooter ou moto légère thermique',
-        'avion_court':'Avion court-courrier',
-        'avion_long':'Avion long-courrier',
-        'velo':'Vélo',
-        'velo_electrique':'Vélo électrique',
-        'trottinette':'Trottinette',
-        'trottinette_electrique':'Trottinette électrique',
-        'tram':'Tram'
-    }
+    fr: {} // inverse automatiquement
 };
+for(let k in translations.en) translations.fr[translations.en[k]]=k;
 
-let currentLang='fr';
-
-function updateTable(){
-    let totalUsage=0, totalConstruction=0;
-    const labels=[], values=[];
+// Initialise les coefficients avec valeurs par défaut
+window.onload = ()=>{
     document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
         const key=row.getAttribute("data-key");
-        const input=parseFloat(row.cells[1].getElementsByTagName("input")[0].value) || 0;
-        const usage=(input * factors[key]);
-        row.cells[2].innerText=usage.toFixed(2);
-        const construction=parseFloat(row.cells[3].innerText);
-        if(input>0){
-            totalUsage+=usage;
-            totalConstruction+=construction;
-            labels.push(translations[currentLang][key]);
+        row.cells[1].getElementsByTagName("input")[0].value=defaultFactors[key];
+    });
+    loadLocal();
+    updateTable();
+};
+
+function updateTable(){
+    let totalUsage=0, totalConstruction=0, labels=[], values=[];
+    document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
+        const key=row.getAttribute("data-key");
+        const distance=parseFloat(row.cells[2].getElementsByTagName("input")[0].value)||0;
+        const factor=parseFloat(row.cells[1].getElementsByTagName("input")[0].value)||defaultFactors[key];
+        const usage=distance*factor;
+        row.cells[3].innerText=usage.toFixed(2);
+        if(distance>0){
+            labels.push(row.cells[0].innerText);
             values.push(usage);
         }
+        totalUsage+=usage;
+        totalConstruction+=parseFloat(row.cells[4].innerText);
     });
     document.getElementById("totalUsage").innerText=totalUsage.toFixed(2);
     document.getElementById("totalConstruction").innerText=totalConstruction.toFixed(2);
-    renderChart(labels, values);
+    updateChart(labels, values);
     saveLocal();
 }
 
-let chartInstance=null;
-function renderChart(labels, data){
-    const ctx=document.getElementById('co2Chart').getContext('2d');
-    if(chartInstance) chartInstance.destroy();
-    chartInstance=new Chart(ctx,{
-        type:'bar',
-        data:{
-            labels:labels,
-            datasets:[{
-                label:'CO₂ Usage² (kg)',
-                data:data,
-                backgroundColor:'rgba(54,162,235,0.6)'
-            }]
-        },
-        options:{
-            responsive:true,
-            maintainAspectRatio:false,
-            scales:{y:{beginAtZero:true}}
-        }
-    });
-}
-
-function changeLanguage(lang){
-    currentLang=lang;
+function resetCoefficients(){
     document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
         const key=row.getAttribute("data-key");
-        row.cells[0].innerText=translations[lang][key];
+        row.cells[1].getElementsByTagName("input")[0].value=defaultFactors[key];
     });
     updateTable();
 }
 
-function toggleDarkMode(enabled){
-    if(enabled) document.body.classList.add('dark-mode');
-    else document.body.classList.remove('dark-mode');
-}
-
-function exportCSV(){
-    let csv="Transport,Distance (km),Usage² (kg CO₂),Construction (kg CO₂)\n";
-    document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
-        const key=row.getAttribute("data-key");
-        const distance=row.cells[1].getElementsByTagName("input")[0].value;
-        if(distance){
-            csv+=`"${translations[currentLang][key]}",${distance},${row.cells[2].innerText},${row.cells[3].innerText}\n`;
-        }
+function updateChart(labels, data){
+    if(window.co2ChartInstance) window.co2ChartInstance.destroy();
+    const ctx=document.getElementById('co2Chart').getContext('2d');
+    window.co2ChartInstance=new Chart(ctx,{
+        type:'bar',
+        data:{ labels:labels, datasets:[{ label:'CO₂ Usage² (kg)', data:data, backgroundColor:'rgba(75,192,192,0.6)' }]},
+        options:{ responsive:true, maintainAspectRatio:false }
     });
-    const blob=new Blob([csv],{type:'text/csv'}); 
-    const link=document.createElement('a');
-    link.href=URL.createObjectURL(blob);
-    link.download="bilan_carbone.csv";
-    link.click();
 }
 
-function exportJSON(){
-    const data=[];
+// Traduction
+function changeLanguage(lang){
     document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
-        const key=row.getAttribute("data-key");
-        const distance=row.cells[1].getElementsByTagName("input")[0].value;
-        if(distance){
-            data.push({
-                transport:translations[currentLang][key],
-                distance:parseFloat(distance),
-                usage:parseFloat(row.cells[2].innerText),
-                construction:parseFloat(row.cells[3].innerText)
-            });
-        }
+        const key=row.cells[0].innerText;
+        if(translations[lang][key]) row.cells[0].innerText=translations[lang][key];
     });
-    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-    const link=document.createElement('a');
-    link.href=URL.createObjectURL(blob);
-    link.download="bilan_carbone.json";
-    link.click();
+    document.querySelectorAll("#transportTable th, #transportTable tfoot th").forEach(th=>{
+        if(translations[lang][th.innerText]) th.innerText=translations[lang][th.innerText];
+    });
+    updateTable();
 }
 
-// Local storage
+// Dark mode
+function toggleDarkMode(enable){
+    document.body.classList.toggle('dark-mode', enable);
+}
+
+// LocalStorage
 function saveLocal(){
     const data={};
     document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
         const key=row.getAttribute("data-key");
-        const val=row.cells[1].getElementsByTagName("input")[0].value;
-        data[key]=val;
+        data[key]={distance: row.cells[2].getElementsByTagName("input")[0].value,
+                   factor: row.cells[1].getElementsByTagName("input")[0].value};
     });
-    localStorage.setItem('bilanData',JSON.stringify(data));
+    localStorage.setItem('bilanCarbone', JSON.stringify(data));
 }
-
 function loadLocal(){
-    const data=JSON.parse(localStorage.getItem('bilanData')||'{}');
+    const data=JSON.parse(localStorage.getItem('bilanCarbone')||"{}");
     document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
         const key=row.getAttribute("data-key");
-        if(data[key]) row.cells[1].getElementsByTagName("input")[0].value=data[key];
+        if(data[key]){
+            row.cells[2].getElementsByTagName("input")[0].value=data[key].distance;
+            row.cells[1].getElementsByTagName("input")[0].value=data[key].factor;
+        }
     });
-    updateTable();
 }
 
-window.onload=loadLocal;
+// Export (simplifié)
+function exportCSV(){
+    let csv='Transport,Coefficient d\'usage,Distance (km),Usage² (kg CO₂),Construction (kg CO₂)\n';
+    document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
+        const vals=[...row.cells].map(td=>td.querySelector('input')?td.querySelector('input').value:td.innerText);
+        csv+=vals.join(',')+'\n';
+    });
+    const blob=new Blob([csv],{type:'text/csv'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='bilan.csv';
+    a.click();
+}
+function exportJSON(){
+    const data={};
+    document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
+        const key=row.cells[0].innerText;
+        data[key]={factor: row.cells[1].getElementsByTagName("input")[0].value,
+                   distance: row.cells[2].getElementsByTagName("input")[0].value,
+                   usage: row.cells[3].innerText,
+                   construction: row.cells[4].innerText};
+    });
+    const blob=new Blob([JSON.stringify(data, null, 2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='bilan.json';
+    a.click();
+}
 </script>
+
 </body>
 </html>
