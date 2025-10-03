@@ -116,17 +116,24 @@ function updateTotals() {
 }
 
 function saveLocalStorage() {
-    const data = Array.from(document.querySelectorAll('#transportTable tbody tr input')).map(input => input.value);
-    localStorage.setItem('distances', JSON.stringify(data));
+    const distances = Array.from(document.querySelectorAll('#transportTable tbody tr input[type="number"]:not([step])')).map(i => i.value);
+    const factorValues = Array.from(document.querySelectorAll('#transportTable tbody tr input[type="number"][step]')).map(i => i.value);
+    localStorage.setItem('distances', JSON.stringify(distances));
+    localStorage.setItem('factors', JSON.stringify(factorValues));
 }
 
 function loadLocalStorage() {
-    const data = JSON.parse(localStorage.getItem('distances') || '[]');
-    document.querySelectorAll('#transportTable tbody tr input').forEach((input,i) => {
-        if(data[i] !== undefined) {
-            input.value = data[i];
-            calculateRow(input);
+    const distances = JSON.parse(localStorage.getItem('distances') || '[]');
+    const factorValues = JSON.parse(localStorage.getItem('factors') || '[]');
+    document.querySelectorAll('#transportTable tbody tr').forEach((row,i) => {
+        const distanceInput = row.querySelector('input[type="number"]:not([step])');
+        const factorInput = row.querySelector('input[type="number"][step]');
+        if(distances[i] !== undefined) distanceInput.value = distances[i];
+        if(factorValues[i] !== undefined) {
+            factorInput.value = factorValues[i];
+            factors[row.cells[0].innerText] = parseFloat(factorValues[i]) || 0;
         }
+        calculateRow(distanceInput);
     });
 }
 
