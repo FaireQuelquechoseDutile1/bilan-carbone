@@ -25,7 +25,12 @@ button { margin: 5px; }
 <select id="languageSelect" onchange="changeLanguage(this.value)">
     <option value="fr">Français</option>
     <option value="en">English</option>
+    <option value="de">Deutsch</option>
+    <option value="it">Italiano</option>
+    <option value="es">Español</option>
+    <option value="pt">Português</option>
 </select>
+
 
 <label for="darkSwitch" id="labelDark">Mode sombre :</label>
 <input type="checkbox" id="darkSwitch" onchange="toggleDarkMode(this.checked)">
@@ -101,6 +106,78 @@ const translations = {
         'Afficher/Masquer Construction':'Show/Hide Construction',
         'Langue :':'Language:', 'Mode sombre :':'Dark mode:'
     },
+    de: {
+        pageTitle: "CO₂-Bilanz",
+        colTransport: "Transportmittel",
+        colCoeff: "Nutzungsfaktor",
+        colDistance: "Entfernung (km)",
+        colUsage: "Nutzung² (kg CO₂)",
+        colConstruction: "Herstellung (kg CO₂)",
+        'Voiture essence':'Benzinauto', 'Voiture diesel':'Dieselauto', 'TGV':'TGV',
+        'Intercité':'Intercity-Zug', 'RER/Transilien':'S-Bahn/Regionalbahn', 'Autocar thermique':'Reisebus',
+        'Covoiturage électrique':'Elektrische Fahrgemeinschaft', 'Covoiturage thermique':'Thermische Fahrgemeinschaft',
+        'Moto thermique':'Motorrad (Verbrenner)', 'Scooter ou moto légère thermique':'Roller/leichtes Motorrad (Verbrenner)',
+        'Avion court-courrier':'Kurzstreckenflug', 'Avion long-courrier':'Langstreckenflug',
+        'Vélo':'Fahrrad', 'Vélo électrique':'E-Bike', 'Trottinette':'Tretroller', 'Trottinette électrique':'E-Scooter', 'Tram':'Straßenbahn',
+        'Exporter CSV':'CSV exportieren', 'Exporter JSON':'JSON exportieren',
+        'Réinitialiser les coefficients':'Faktoren zurücksetzen', 'Réinitialiser la distance':'Entfernung zurücksetzen',
+        'Afficher/Masquer Construction':'Herstellung ein/ausblenden',
+        'Langue :':'Sprache:', 'Mode sombre :':'Dunkelmodus:'
+    },
+	it: {
+		pageTitle: "Bilancio di carbonio",
+		colTransport: "Trasporto",
+		colCoeff: "Coefficiente d'uso",
+		colDistance: "Distanza (km)",
+		colUsage: "Uso² (kg CO₂)",
+		colConstruction: "Costruzione (kg CO₂)",
+		'Voiture essence':'Auto a benzina', 'Voiture diesel':'Auto diesel', 'TGV':'TGV',
+		'Intercité':'Intercity', 'RER/Transilien':'Treno regionale', 'Autocar thermique':'Autobus termico',
+		'Covoiturage électrique':'Carpooling elettrico', 'Covoiturage thermique':'Carpooling termico',
+		'Moto thermique':'Moto a combustione', 'Scooter ou moto légère thermique':'Scooter/moto leggera a combustione',
+		'Avion court-courrier':'Volo a corto raggio', 'Avion long-courrier':'Volo a lungo raggio',
+		'Vélo':'Bicicletta', 'Vélo électrique':'Bicicletta elettrica', 'Trottinette':'Monopattino', 'Trottinette électrique':'Monopattino elettrico', 'Tram':'Tram',
+		'Exporter CSV':'Esporta CSV', 'Exporter JSON':'Esporta JSON',
+		'Réinitialiser les coefficients':'Reimposta coefficienti', 'Réinitialiser la distance':'Reimposta distanza',
+		'Afficher/Masquer Construction':'Mostra/Nascondi costruzione',
+		'Langue :':'Lingua:', 'Mode sombre :':'Modalità scura:'
+	},
+	es: {
+		pageTitle: "Huella de carbono",
+		colTransport: "Transporte",
+		colCoeff: "Coeficiente de uso",
+		colDistance: "Distancia (km)",
+		colUsage: "Uso² (kg CO₂)",
+		colConstruction: "Construcción (kg CO₂)",
+		'Voiture essence':'Coche de gasolina', 'Voiture diesel':'Coche diésel', 'TGV':'TGV',
+		'Intercité':'Intercity', 'RER/Transilien':'Cercanías/Regional', 'Autocar thermique':'Autobús térmico',
+		'Covoiturage électrique':'Coche compartido eléctrico', 'Covoiturage thermique':'Coche compartido térmico',
+		'Moto thermique':'Motocicleta térmica', 'Scooter ou moto légère thermique':'Scooter/moto ligera térmica',
+		'Avion court-courrier':'Vuelo de corta distancia', 'Avion long-courrier':'Vuelo de larga distancia',
+		'Vélo':'Bicicleta', 'Vélo électrique':'Bicicleta eléctrica', 'Trottinette':'Patinete', 'Trottinette électrique':'Patinete eléctrico', 'Tram':'Tranvía',
+		'Exporter CSV':'Exportar CSV', 'Exporter JSON':'Exportar JSON',
+		'Réinitialiser les coefficients':'Restablecer coeficientes', 'Réinitialiser la distance':'Restablecer distancia',
+		'Afficher/Masquer Construction':'Mostrar/Ocultar construcción',
+		'Langue :':'Idioma:', 'Mode sombre :':'Modo oscuro:'
+	},
+	pt: {
+		pageTitle: "Balanço de carbono",
+		colTransport: "Transporte",
+		colCoeff: "Coeficiente de uso",
+		colDistance: "Distância (km)",
+		colUsage: "Uso² (kg CO₂)",
+		colConstruction: "Construção (kg CO₂)",
+		'Voiture essence':'Carro a gasolina', 'Voiture diesel':'Carro a diesel', 'TGV':'TGV',
+		'Intercité':'Intercidades', 'RER/Transilien':'Trem regional', 'Autocar thermique':'Ônibus térmico',
+		'Covoiturage électrique':'Carona elétrica', 'Covoiturage thermique':'Carona térmica',
+		'Moto thermique':'Moto a combustão', 'Scooter ou moto légère thermique':'Scooter/moto leve a combustão',
+		'Avion court-courrier':'Voo de curta distância', 'Avion long-courrier':'Voo de longa distância',
+		'Vélo':'Bicicleta', 'Vélo électrique':'Bicicleta elétrica', 'Trottinette':'Patinete', 'Trottinette électrique':'Patinete elétrico', 'Tram':'Elétrico',
+		'Exporter CSV':'Exportar CSV', 'Exporter JSON':'Exportar JSON',
+		'Réinitialiser les coefficients':'Redefinir coeficientes', 'Réinitialiser la distance':'Redefinir distância',
+		'Afficher/Masquer Construction':'Mostrar/Ocultar construção',
+		'Langue :':'Idioma:', 'Mode sombre :':'Modo escuro:'
+	},
     fr: {} // français par défaut
 };
 
