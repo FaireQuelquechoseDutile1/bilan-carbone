@@ -6,212 +6,318 @@
 <title>Bilan Carbone</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; color: #333; transition: background-color 0.3s, color 0.3s; }
-table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; color: #333; transition: background 0.3s, color 0.3s; }
+.dark-mode { background-color: #121212; color: #eee; }
+table { border-collapse: collapse; width: 100%; max-width: 100%; margin-bottom: 20px; }
 th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-th { cursor: pointer; background-color: #eaeaea; }
+th { cursor: pointer; background: #f0f0f0; }
 input[type="number"] { width: 80px; }
-.controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
-.dark-mode { background-color: #1e1e1e; color: #eee; }
-.dark-mode th { background-color: #333; }
-.dark-mode td, .dark-mode input { background-color: #2a2a2a; color: #eee; border-color: #555; }
-button { cursor: pointer; padding: 5px 10px; }
+#chartWrapper { width: 100%; height: 50vh; margin-bottom: 20px; }
+.top-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; align-items: center; }
+.top-controls label { margin-right: 5px; }
+
+/* Responsive table */
+@media(max-width: 800px){
+  table, thead, tbody, th, td, tr { display:block; }
+  th { display:none; }
+  td { text-align:right; padding-left: 50%; position: relative; }
+  td::before { content: attr(data-label); position: absolute; left: 10px; width: 45%; text-align:left; font-weight:bold; }
+}
 </style>
 </head>
 <body>
-<div class="controls">
-    <div>
-        <label for="langSelect">Langue:</label>
-        <select id="langSelect">
-            <option value="fr">Français</option>
-            <option value="en">English</option>
-        </select>
-        <label for="darkSwitch">Dark Mode:</label>
-        <input type="checkbox" id="darkSwitch">
-    </div>
-    <div>
-        <button id="exportCSVBtn">Exporter CSV</button>
-        <button id="exportJSONBtn">Exporter JSON</button>
-    </div>
+
+<div class="top-controls">
+    <label for="langSelect">Langue / Language:</label>
+    <select id="langSelect">
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+    </select>
+
+    <label for="darkSwitch">Dark Mode</label>
+    <input type="checkbox" id="darkSwitch">
+
+    <button id="exportCSVBtn">Exporter CSV</button>
+    <button id="exportJSONBtn">Exporter JSON</button>
 </div>
 
 <table id="transportTable">
-    <thead>
-        <tr>
-            <th id="thTransport">Transport</th>
-            <th id="thDistance">Distance (km)</th>
-            <th id="thCO2">CO₂ Transport (kg)</th>
-            <th id="thEmbodied">CO₂ Fabrication/Entretien (kg)</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td>Voiture essence</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">5</td></tr>
-        <tr><td>Voiture diesel</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">5</td></tr>
-        <tr><td>Bus</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">3</td></tr>
-        <tr><td>Train</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">2</td></tr>
-        <tr><td>Avion court courrier</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">50</td></tr>
-        <tr><td>Avion long courrier</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">150</td></tr>
-        <tr><td>Bicyclette</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">2</td></tr>
-        <tr><td>Vélo électrique</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">5</td></tr>
-        <tr><td>Trotinette</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">1</td></tr>
-        <tr><td>Trotinette électrique</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">3</td></tr>
-        <tr><td>Tram</td><td><input type="number" min="0" oninput="calculateRow(this)"></td><td class="co2Result">0</td><td class="co2Embodied">1</td></tr>
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="2"><strong>Total CO₂ (kg)</strong></td>
-            <td id="totalCO2">0</td>
-            <td id="totalEmbodied">0</td>
-        </tr>
-    </tfoot>
+<thead>
+<tr>
+<th id="thTransport">Transport</th>
+<th id="thDistance">Distance (km)</th>
+<th id="thFactor">Facteur CO₂ (kg/km)</th>
+<th id="thResult">CO₂ Transport (kg)</th>
+<th id="thEmbodied">CO₂ Fabrication/Entretien (kg)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Transport">Voiture essence</td>
+<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
+<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.192" oninput="updateFactor(this)"></td>
+<td class="co2Result" data-label="CO₂ Transport">0</td>
+<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.5</td>
+</tr>
+<tr>
+<td data-label="Transport">Voiture électrique</td>
+<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
+<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.055" oninput="updateFactor(this)"></td>
+<td class="co2Result" data-label="CO₂ Transport">0</td>
+<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.7</td>
+</tr>
+<tr>
+<td data-label="Transport">Vélo électrique</td>
+<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
+<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.02" oninput="updateFactor(this)"></td>
+<td class="co2Result" data-label="CO₂ Transport">0</td>
+<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.1</td>
+</tr>
+<tr>
+<td data-label="Transport">Trottinette</td>
+<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
+<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.03" oninput="updateFactor(this)"></td>
+<td class="co2Result" data-label="CO₂ Transport">0</td>
+<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.05</td>
+</tr>
+<tr>
+<td data-label="Transport">Trottinette électrique</td>
+<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
+<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.02" oninput="updateFactor(this)"></td>
+<td class="co2Result" data-label="CO₂ Transport">0</td>
+<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.07</td>
+</tr>
+<tr>
+<td data-label="Transport">Tram</td>
+<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
+<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.03" oninput="updateFactor(this)"></td>
+<td class="co2Result" data-label="CO₂ Transport">0</td>
+<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.1</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td colspan="3" id="totalLabel">Bilan total</td>
+<td id="totalCO2">0</td>
+<td id="totalEmbodied">0</td>
+</tr>
+</tfoot>
 </table>
 
-<canvas id="chartContainer" height="200"></canvas>
+<div id="chartWrapper">
+<canvas id="chartContainer"></canvas>
+</div>
 
 <script>
 const factors = {
-    'Voiture essence': 0.192,
-    'Voiture diesel': 0.171,
-    'Bus': 0.105,
-    'Train': 0.041,
-    'Avion court courrier': 0.285,
-    'Avion long courrier': 0.195,
-    'Bicyclette': 0,
-    'Vélo électrique': 0.05,
-    'Trotinette': 0.02,
-    'Trotinette électrique': 0.03,
-    'Tram': 0.04
+    "Voiture essence":0.192,
+    "Voiture électrique":0.055,
+    "Vélo électrique":0.02,
+    "Trottinette":0.03,
+    "Trottinette électrique":0.02,
+    "Tram":0.03
 };
 
 const translations = {
-    fr: {
-        thTransport: 'Transport', thDistance: 'Distance (km)', thCO2: 'CO₂ Transport (kg)', thEmbodied: 'CO₂ Fabrication/Entretien (kg)',
-        exportCSVBtn: 'Exporter CSV', exportJSONBtn: 'Exporter JSON'
+    fr:{
+        btnExportCSV:"Exporter CSV",
+        btnExportJSON:"Exporter JSON",
+        thTransport:"Transport",
+        thDistance:"Distance (km)",
+        thFactor:"Facteur CO₂ (kg/km)",
+        thResult:"CO₂ Transport (kg)",
+        thEmbodied:"CO₂ Fabrication/Entretien (kg)",
+        totalLabel:"Bilan total",
+        chartLabel:"CO₂ Transport (kg)"
     },
-    en: {
-        thTransport: 'Transport', thDistance: 'Distance (km)', thCO2: 'CO₂ Transport (kg)', thEmbodied: 'CO₂ Manufacture/Maintenance (kg)',
-        exportCSVBtn: 'Export CSV', exportJSONBtn: 'Export JSON'
+    en:{
+        btnExportCSV:"Export CSV",
+        btnExportJSON:"Export JSON",
+        thTransport:"Transport",
+        thDistance:"Distance (km)",
+        thFactor:"CO₂ Factor (kg/km)",
+        thResult:"CO₂ Transport (kg)",
+        thEmbodied:"CO₂ Manufacturing/Maintenance (kg)",
+        totalLabel:"Total Carbon",
+        chartLabel:"CO₂ Transport (kg)"
     }
 };
 
-function calculateRow(input) {
+// Calcul
+function calculateRow(input){
     const row = input.parentElement.parentElement;
+    const distance = parseFloat(row.querySelector('input[type="number"]:not([step])').value)||0;
     const transport = row.cells[0].innerText;
-    const distance = parseFloat(input.value) || 0;
-    const co2 = distance * (factors[transport] || 0);
+    const factor = factors[transport]||0;
+    const co2 = distance*factor;
     row.querySelector('.co2Result').innerText = co2.toFixed(2);
-    updateTotals();
+    updateTotal();
     updateChart();
     saveLocalStorage();
 }
 
-function updateTotals() {
-    let totalCo2 = 0, totalEmbodied = 0;
-    document.querySelectorAll('#transportTable tbody tr').forEach(row => {
-        totalCo2 += parseFloat(row.querySelector('.co2Result').innerText) || 0;
-        totalEmbodied += parseFloat(row.querySelector('.co2Embodied').innerText) || 0;
-    });
-    document.getElementById('totalCO2').innerText = totalCo2.toFixed(2);
-    document.getElementById('totalEmbodied').innerText = totalEmbodied.toFixed(2);
+function updateFactor(input){
+    const row = input.parentElement.parentElement;
+    const transport = row.cells[0].innerText;
+    factors[transport] = parseFloat(input.value)||0;
+    const distanceInput = row.querySelector('input[type="number"]:not([step])');
+    calculateRow(distanceInput);
 }
 
-function saveLocalStorage() {
-    const distances = Array.from(document.querySelectorAll('#transportTable tbody tr input[type="number"]:not([step])')).map(i => i.value);
-    const factorValues = Array.from(document.querySelectorAll('#transportTable tbody tr input[type="number"][step]')).map(i => i.value);
-    localStorage.setItem('distances', JSON.stringify(distances));
-    localStorage.setItem('factors', JSON.stringify(factorValues));
+function updateTotal(){
+    let total = 0;
+    let totalEmb = 0;
+    document.querySelectorAll('#transportTable tbody tr').forEach(row=>{
+        total += parseFloat(row.querySelector('.co2Result').innerText)||0;
+        totalEmb += parseFloat(row.querySelector('.co2Embodied').innerText)||0;
+    });
+    document.getElementById('totalCO2').innerText = total.toFixed(2);
+    document.getElementById('totalEmbodied').innerText = totalEmb.toFixed(2);
 }
 
-function loadLocalStorage() {
-    const distances = JSON.parse(localStorage.getItem('distances') || '[]');
-    const factorValues = JSON.parse(localStorage.getItem('factors') || '[]');
-    document.querySelectorAll('#transportTable tbody tr').forEach((row,i) => {
-        const distanceInput = row.querySelector('input[type="number"]:not([step])');
-        const factorInput = row.querySelector('input[type="number"][step]');
-        if(distances[i] !== undefined) distanceInput.value = distances[i];
-        if(factorValues[i] !== undefined) {
-            factorInput.value = factorValues[i];
-            factors[row.cells[0].innerText] = parseFloat(factorValues[i]) || 0;
-        }
-        calculateRow(distanceInput);
+// Export
+function exportCSV(){
+    let csv = [];
+    document.querySelectorAll('#transportTable tr').forEach(tr=>{
+        let row = [];
+        tr.querySelectorAll('th, td').forEach(td=>{
+            row.push(td.innerText);
+        });
+        csv.push(row.join(","));
     });
-}
-
-function exportCSV() {
-    let csv = 'Transport,Distance,CO2,CO2 Fabrication/Entretien\\n';
-    document.querySelectorAll('#transportTable tbody tr').forEach(row => {
-        csv += [
-            row.cells[0].innerText,
-            row.querySelector('input').value,
-            row.querySelector('.co2Result').innerText,
-            row.querySelector('.co2Embodied').innerText
-        ].join(',') + '\\n';
-    });
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv.join("\n")], {type:'text/csv'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'bilan_carbone.csv';
+    a.download = "bilan_carbone.csv";
     a.click();
 }
 
-function exportJSON() {
-    const data = Array.from(document.querySelectorAll('#transportTable tbody tr')).map(row => ({
-        transport: row.cells[0].innerText,
-        distance: row.querySelector('input').value,
-        co2: row.querySelector('.co2Result').innerText,
-        co2Embodied: row.querySelector('.co2Embodied').innerText
-    }));
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+function exportJSON(){
+    const data = [];
+    document.querySelectorAll('#transportTable tbody tr').forEach(tr=>{
+        const transport = tr.cells[0].innerText;
+        const distance = parseFloat(tr.querySelector('input[type="number"]:not([step])').value)||0;
+        const factor = parseFloat(tr.querySelector('input[type="number"][step]').value)||0;
+        const result = parseFloat(tr.querySelector('.co2Result').innerText)||0;
+        const embodied = parseFloat(tr.querySelector('.co2Embodied').innerText)||0;
+        data.push({transport,distance,factor,result,embodied});
+    });
+    const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'bilan_carbone.json';
+    a.download = "bilan_carbone.json";
     a.click();
 }
 
-document.getElementById('exportCSVBtn').onclick = exportCSV;
-document.getElementById('exportJSONBtn').onclick = exportJSON;
+// Dark mode
+const darkSwitch = document.getElementById('darkSwitch');
+darkSwitch.addEventListener('change',()=>{
+    document.body.classList.toggle('dark-mode', darkSwitch.checked);
+    localStorage.setItem('darkMode', darkSwitch.checked);
+});
+if(localStorage.getItem('darkMode')==='true'){
+    document.body.classList.add('dark-mode');
+    darkSwitch.checked = true;
+}
 
-document.getElementById('langSelect').onchange = function() {
-    const lang = this.value;
-    Object.keys(translations[lang]).forEach(id => {
+// Language
+document.getElementById('langSelect').addEventListener('change',(e)=>{
+    updateLanguage(e.target.value);
+});
+
+function updateLanguage(lang){
+    Object.keys(translations[lang]).forEach(id=>{
         const el = document.getElementById(id);
         if(el) el.innerText = translations[lang][id];
     });
-}
-
-document.getElementById('darkSwitch').onchange = function() {
-    document.body.classList.toggle('dark-mode', this.checked);
-    localStorage.setItem('darkMode', this.checked);
-}
-
-function initDarkMode() {
-    const dark = localStorage.getItem('darkMode') === 'true';
-    document.getElementById('darkSwitch').checked = dark;
-    document.body.classList.toggle('dark-mode', dark);
+    document.getElementById('exportCSVBtn').innerText = translations[lang].btnExportCSV;
+    document.getElementById('exportJSONBtn').innerText = translations[lang].btnExportJSON;
+    updateChart();
 }
 
 // Chart
 let chart;
-function updateChart() {
-    const labels = Array.from(document.querySelectorAll('#transportTable tbody tr td:first-child')).map(td => td.innerText);
-    const data = Array.from(document.querySelectorAll('#transportTable tbody tr .co2Result')).map(td => parseFloat(td.innerText) || 0);
-    if(chart) {
+function updateChart(){
+    const labels = Array.from(document.querySelectorAll('#transportTable tbody tr td:first-child')).map(td=>td.innerText);
+    const data = Array.from(document.querySelectorAll('#transportTable tbody tr .co2Result')).map(td=>parseFloat(td.innerText)||0);
+    const chartLabel = translations[document.getElementById('langSelect').value].chartLabel;
+
+    if(chart){
         chart.data.labels = labels;
         chart.data.datasets[0].data = data;
+        chart.data.datasets[0].label = chartLabel;
         chart.update();
     } else {
         const ctx = document.getElementById('chartContainer').getContext('2d');
-        chart = new Chart(ctx, {
-            type: 'bar',
-            data: { labels, datasets: [{ label: 'CO₂ Transport (kg)', data, backgroundColor: '#4caf50' }] },
-            options: { responsive: true, scales: { y: { beginAtZero:true } } }
+        chart = new Chart(ctx,{
+            type:'bar',
+            data:{ labels, datasets:[{ label: chartLabel, data, backgroundColor:'#4caf50' }]},
+            options:{ responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true }}}
         });
     }
 }
 
-// Initialisation
+// LocalStorage
+function saveLocalStorage(){
+    const data = [];
+    document.querySelectorAll('#transportTable tbody tr').forEach(tr=>{
+        const distance = parseFloat(tr.querySelector('input[type="number"]:not([step])').value)||0;
+        const factor = parseFloat(tr.querySelector('input[type="number"][step]').value)||0;
+        data.push({distance,factor});
+    });
+    localStorage.setItem('bilanData', JSON.stringify(data));
+}
+
+function loadLocalStorage(){
+    const data = JSON.parse(localStorage.getItem('bilanData')||"[]");
+    if(data.length){
+        document.querySelectorAll('#transportTable tbody tr').forEach((tr,i)=>{
+            if(data[i]){
+                tr.querySelector('input[type="number"]:not([step])').value = data[i].distance;
+                tr.querySelector('input[type="number"][step]').value = data[i].factor;
+                calculateRow(tr.querySelector('input[type="number"]:not([step])'));
+            }
+        });
+    }
+}
+
+// Tri colonnes
+document.querySelectorAll('#transportTable th').forEach((th, index)=>{
+    th.addEventListener('click', ()=>{
+        sortTable(index);
+    });
+});
+
+function sortTable(n){
+    const table = document.getElementById('transportTable');
+    let switching = true;
+    let dir = 'asc';
+    while(switching){
+        switching = false;
+        const rows = Array.from(table.tBodies[0].rows);
+        for(let i=0;i<rows.length-1;i++){
+            let shouldSwitch = false;
+            let x = rows[i].cells[n].innerText.toLowerCase();
+            let y = rows[i+1].cells[n].innerText.toLowerCase();
+            if(!isNaN(parseFloat(x)) && !isNaN(parseFloat(y))){
+                x=parseFloat(x); y=parseFloat(y);
+            }
+            if(dir==='asc' && x>y){ shouldSwitch=true; break; }
+            if(dir==='desc' && x<y){ shouldSwitch=true; break; }
+            if(shouldSwitch){
+                rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+                switching=true;
+            }
+        }
+        if(!switching && dir==='asc'){ dir='desc'; switching=true; }
+    }
+}
+
+// Init
+document.getElementById('exportCSVBtn').addEventListener('click', exportCSV);
+document.getElementById('exportJSONBtn').addEventListener('click', exportJSON);
+
 loadLocalStorage();
-initDarkMode();
 updateChart();
 </script>
 </body>
