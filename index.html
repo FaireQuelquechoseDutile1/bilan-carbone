@@ -113,25 +113,33 @@ window.onload = ()=>{
 };
 
 function updateTable(){
-    let totalUsage=0, totalConstruction=0, labels=[], values=[];
-    document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
-        const key=row.getAttribute("data-key");
-        const distance=parseFloat(row.cells[2].getElementsByTagName("input")[0].value)||0;
-        const factor=parseFloat(row.cells[1].getElementsByTagName("input")[0].value)||defaultFactors[key];
-        const usage=distance*factor;
-        row.cells[3].innerText=usage.toFixed(2);
-        if(distance>0){
+    let totalUsage = 0, totalConstruction = 0, labels = [], values = [];
+    document.querySelectorAll("#transportTable tbody tr").forEach(row => {
+        const key = row.getAttribute("data-key");
+        const distanceInput = row.cells[2].getElementsByTagName("input")[0];
+        const factorInput = row.cells[1].getElementsByTagName("input")[0];
+        const distance = parseFloat(distanceInput.value) || 0;
+        const factor = parseFloat(factorInput.value) || defaultFactors[key];
+        const usage = distance * factor;
+        row.cells[3].innerText = usage.toFixed(2);
+
+        if(distance > 0){  // on ne cumule que si distance > 0
+            totalUsage += usage;
+            totalConstruction += parseFloat(row.cells[4].innerText) || 0;  // <-- ici aussi
             labels.push(row.cells[0].innerText);
             values.push(usage);
         }
-        totalUsage+=usage;
-        totalConstruction+=parseFloat(row.cells[4].innerText);
     });
-    document.getElementById("totalUsage").innerText=totalUsage.toFixed(2);
-    document.getElementById("totalConstruction").innerText=totalConstruction.toFixed(2);
+
+    document.getElementById("totalUsage").innerText = totalUsage.toFixed(2);
+    document.getElementById("totalConstruction").innerText = totalConstruction.toFixed(2);
+
     updateChart(labels, values);
     saveLocal();
 }
+
+
+
 
 function resetCoefficients(){
     document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
