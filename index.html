@@ -6,319 +6,198 @@
 <title>Bilan Carbone</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; color: #333; transition: background 0.3s, color 0.3s; }
-.dark-mode { background-color: #121212; color: #eee; }
-table { border-collapse: collapse; width: 100%; max-width: 100%; margin-bottom: 20px; }
+body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; color: #000; transition: 0.3s; }
+.dark-mode { background: #121212; color: #ddd; }
+.dark-mode table th { background: #333; color: #fff; }
+table { border-collapse: collapse; width: 100%; max-width: 800px; margin-bottom: 20px; }
 th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-th { cursor: pointer; background: #f0f0f0; }
 input[type="number"] { width: 80px; }
-#chartWrapper { width: 100%; height: 50vh; margin-bottom: 20px; }
-.top-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; align-items: center; }
-.top-controls label { margin-right: 5px; }
-
-/* Responsive table */
-@media(max-width: 800px){
-  table, thead, tbody, th, td, tr { display:block; }
-  th { display:none; }
-  td { text-align:right; padding-left: 50%; position: relative; }
-  td::before { content: attr(data-label); position: absolute; left: 10px; width: 45%; text-align:left; font-weight:bold; }
-}
+button, select { margin: 5px; padding: 5px 10px; }
+#chartContainer { max-width: 800px; margin: 20px auto; }
 </style>
 </head>
 <body>
 
-<div class="top-controls">
-    <label for="langSelect">Langue / Language:</label>
-    <select id="langSelect">
-        <option value="fr">Français</option>
-        <option value="en">English</option>
-    </select>
+<h1>Bilan Carbone</h1>
 
-    <label for="darkSwitch">Dark Mode</label>
-    <input type="checkbox" id="darkSwitch">
+<label for="languageSelect">Langue:</label>
+<select id="languageSelect" onchange="changeLanguage(this.value)">
+  <option value="fr">Français</option>
+  <option value="en">English</option>
+</select>
 
-    <button id="exportCSVBtn">Exporter CSV</button>
-    <button id="exportJSONBtn">Exporter JSON</button>
-</div>
+<label for="darkSwitch">Dark Mode:</label>
+<input type="checkbox" id="darkSwitch" onchange="toggleDarkMode(this.checked)">
 
 <table id="transportTable">
-<thead>
-<tr>
-<th id="thTransport">Transport</th>
-<th id="thDistance">Distance (km)</th>
-<th id="thFactor">Facteur CO₂ (kg/km)</th>
-<th id="thResult">CO₂ Transport (kg)</th>
-<th id="thEmbodied">CO₂ Fabrication/Entretien (kg)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td data-label="Transport">Voiture essence</td>
-<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
-<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.192" oninput="updateFactor(this)"></td>
-<td class="co2Result" data-label="CO₂ Transport">0</td>
-<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.5</td>
-</tr>
-<tr>
-<td data-label="Transport">Voiture électrique</td>
-<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
-<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.055" oninput="updateFactor(this)"></td>
-<td class="co2Result" data-label="CO₂ Transport">0</td>
-<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.7</td>
-</tr>
-<tr>
-<td data-label="Transport">Vélo électrique</td>
-<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
-<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.02" oninput="updateFactor(this)"></td>
-<td class="co2Result" data-label="CO₂ Transport">0</td>
-<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.1</td>
-</tr>
-<tr>
-<td data-label="Transport">Trottinette</td>
-<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
-<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.03" oninput="updateFactor(this)"></td>
-<td class="co2Result" data-label="CO₂ Transport">0</td>
-<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.05</td>
-</tr>
-<tr>
-<td data-label="Transport">Trottinette électrique</td>
-<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
-<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.02" oninput="updateFactor(this)"></td>
-<td class="co2Result" data-label="CO₂ Transport">0</td>
-<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.07</td>
-</tr>
-<tr>
-<td data-label="Transport">Tram</td>
-<td data-label="Distance"><input type="number" min="0" value="0" oninput="calculateRow(this)"></td>
-<td data-label="Facteur CO₂"><input type="number" min="0" step="0.001" value="0.03" oninput="updateFactor(this)"></td>
-<td class="co2Result" data-label="CO₂ Transport">0</td>
-<td class="co2Embodied" data-label="CO₂ Fabrication/Entretien">0.1</td>
-</tr>
-</tbody>
-<tfoot>
-<tr>
-<td colspan="3" id="totalLabel">Bilan total</td>
-<td id="totalCO2">0</td>
-<td id="totalEmbodied">0</td>
-</tr>
-</tfoot>
+  <thead>
+    <tr>
+      <th onclick="sortTable(0)">Transport</th>
+      <th>Distance (km)</th>
+      <th>CO₂ (kg)</th>
+      <th>CO₂ fabrication/entretien</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td data-key="Voiture essence">Voiture essence</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">500</td></tr>
+    <tr><td data-key="Voiture diesel">Voiture diesel</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">520</td></tr>
+    <tr><td data-key="Train">Train</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">50</td></tr>
+    <tr><td data-key="Bus">Bus</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">40</td></tr>
+    <tr><td data-key="Avion">Avion</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">150</td></tr>
+    <tr><td data-key="Vélo">Vélo</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">10</td></tr>
+    <tr><td data-key="Vélo électrique">Vélo électrique</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">20</td></tr>
+    <tr><td data-key="Trottinette">Trottinette</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">5</td></tr>
+    <tr><td data-key="Trottinette électrique">Trottinette électrique</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">15</td></tr>
+    <tr><td data-key="Tram">Tram</td><td><input type="number" onchange="updateTable()"></td><td class="co2Result">0</td><td class="co2Embodied">30</td></tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>Total</th><th></th><th id="totalCO2">0</th><th id="totalEmbodied">0</th>
+    </tr>
+  </tfoot>
 </table>
 
-<div id="chartWrapper">
-<canvas id="chartContainer"></canvas>
+<button onclick="exportCSV()">Exporter CSV</button>
+
+<div id="chartContainer">
+  <canvas id="co2Chart"></canvas>
 </div>
 
 <script>
 const factors = {
-    "Voiture essence":0.192,
-    "Voiture électrique":0.055,
-    "Vélo électrique":0.02,
-    "Trottinette":0.03,
-    "Trottinette électrique":0.02,
-    "Tram":0.03
+    'Voiture essence': 0.192,
+    'Voiture diesel': 0.171,
+    'Train': 0.041,
+    'Bus': 0.104,
+    'Avion': 0.255,
+    'Vélo': 0,
+    'Vélo électrique': 0.01,
+    'Trottinette': 0,
+    'Trottinette électrique': 0.01,
+    'Tram': 0.03
 };
 
 const translations = {
-    fr:{
-        btnExportCSV:"Exporter CSV",
-        btnExportJSON:"Exporter JSON",
-        thTransport:"Transport",
-        thDistance:"Distance (km)",
-        thFactor:"Facteur CO₂ (kg/km)",
-        thResult:"CO₂ Transport (kg)",
-        thEmbodied:"CO₂ Fabrication/Entretien (kg)",
-        totalLabel:"Bilan total",
-        chartLabel:"CO₂ Transport (kg)"
-    },
-    en:{
-        btnExportCSV:"Export CSV",
-        btnExportJSON:"Export JSON",
-        thTransport:"Transport",
-        thDistance:"Distance (km)",
-        thFactor:"CO₂ Factor (kg/km)",
-        thResult:"CO₂ Transport (kg)",
-        thEmbodied:"CO₂ Manufacturing/Maintenance (kg)",
-        totalLabel:"Total Carbon",
-        chartLabel:"CO₂ Transport (kg)"
-    }
+  en: {
+    'Voiture essence':'Gasoline car','Voiture diesel':'Diesel car','Train':'Train','Bus':'Bus',
+    'Avion':'Plane','Vélo':'Bicycle','Vélo électrique':'Electric bike','Trottinette':'Scooter',
+    'Trottinette électrique':'Electric scooter','Tram':'Tram'
+  },
+  fr: {
+    'Voiture essence':'Voiture essence','Voiture diesel':'Voiture diesel','Train':'Train','Bus':'Bus',
+    'Avion':'Avion','Vélo':'Vélo','Vélo électrique':'Vélo électrique','Trottinette':'Trottinette',
+    'Trottinette électrique':'Trottinette électrique','Tram':'Tram'
+  }
 };
 
-// Calcul
-function calculateRow(input){
-    const row = input.parentElement.parentElement;
-    const distance = parseFloat(row.querySelector('input[type="number"]:not([step])').value)||0;
-    const transport = row.cells[0].innerText;
-    const factor = factors[transport]||0;
-    const co2 = distance*factor;
-    row.querySelector('.co2Result').innerText = co2.toFixed(2);
-    updateTotal();
-    updateChart();
-    saveLocalStorage();
-}
+let currentLang = 'fr';
+let darkMode = false;
 
-function updateFactor(input){
-    const row = input.parentElement.parentElement;
-    const transport = row.cells[0].innerText;
-    factors[transport] = parseFloat(input.value)||0;
-    const distanceInput = row.querySelector('input[type="number"]:not([step])');
-    calculateRow(distanceInput);
-}
-
-function updateTotal(){
+function updateTable() {
+    const table = document.getElementById('transportTable');
     let total = 0;
-    let totalEmb = 0;
-    document.querySelectorAll('#transportTable tbody tr').forEach(row=>{
-        total += parseFloat(row.querySelector('.co2Result').innerText)||0;
-        totalEmb += parseFloat(row.querySelector('.co2Embodied').innerText)||0;
-    });
+    let totalEmbodied = 0;
+    const chartLabels = [];
+    const chartData = [];
+    for (let i = 1; i < table.rows.length-1; i++) {
+        const row = table.rows[i];
+        const key = row.cells[0].getAttribute('data-key');
+        const value = parseFloat(row.cells[1].firstChild.value) || 0;
+        const co2 = value * factors[key];
+        row.cells[2].innerText = co2.toFixed(2);
+        total += co2;
+        totalEmbodied += parseFloat(row.cells[3].innerText) || 0;
+        chartLabels.push(translations[currentLang][key]);
+        chartData.push(co2);
+        // save in localStorage
+        localStorage.setItem('row_'+key, value);
+    }
     document.getElementById('totalCO2').innerText = total.toFixed(2);
-    document.getElementById('totalEmbodied').innerText = totalEmb.toFixed(2);
+    document.getElementById('totalEmbodied').innerText = totalEmbodied.toFixed(2);
+    updateChart(chartLabels, chartData);
 }
 
-// Export
-function exportCSV(){
-    let csv = [];
-    document.querySelectorAll('#transportTable tr').forEach(tr=>{
+function changeLanguage(lang) {
+    currentLang = lang;
+    const table = document.getElementById('transportTable');
+    for (let i = 1; i < table.rows.length-1; i++) {
+        const key = table.rows[i].cells[0].getAttribute('data-key');
+        table.rows[i].cells[0].innerText = translations[lang][key] || key;
+    }
+    updateTable();
+}
+
+function toggleDarkMode(on) {
+    darkMode = on;
+    document.body.classList.toggle('dark-mode', on);
+}
+
+// CSV export
+function exportCSV() {
+    const table = document.getElementById('transportTable');
+    let csv = '';
+    for (let i = 0; i < table.rows.length; i++) {
         let row = [];
-        tr.querySelectorAll('th, td').forEach(td=>{
-            row.push(td.innerText);
-        });
-        csv.push(row.join(","));
-    });
-    const blob = new Blob([csv.join("\n")], {type:'text/csv'});
+        for (let j = 0; j < table.rows[i].cells.length; j++) {
+            row.push(table.rows[i].cells[j].innerText);
+        }
+        csv += row.join(',') + '\n';
+    }
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = "bilan_carbone.csv";
-    a.click();
+    a.href = url; a.download = 'bilan_carbone.csv'; a.click();
+    URL.revokeObjectURL(url);
 }
 
-function exportJSON(){
-    const data = [];
-    document.querySelectorAll('#transportTable tbody tr').forEach(tr=>{
-        const transport = tr.cells[0].innerText;
-        const distance = parseFloat(tr.querySelector('input[type="number"]:not([step])').value)||0;
-        const factor = parseFloat(tr.querySelector('input[type="number"][step]').value)||0;
-        const result = parseFloat(tr.querySelector('.co2Result').innerText)||0;
-        const embodied = parseFloat(tr.querySelector('.co2Embodied').innerText)||0;
-        data.push({transport,distance,factor,result,embodied});
-    });
-    const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = "bilan_carbone.json";
-    a.click();
+// Load saved values
+function loadSaved() {
+    const table = document.getElementById('transportTable');
+    for (let i = 1; i < table.rows.length-1; i++) {
+        const key = table.rows[i].cells[0].getAttribute('data-key');
+        const value = localStorage.getItem('row_'+key);
+        if (value) table.rows[i].cells[1].firstChild.value = value;
+    }
+    updateTable();
 }
 
-// Dark mode
-const darkSwitch = document.getElementById('darkSwitch');
-darkSwitch.addEventListener('change',()=>{
-    document.body.classList.toggle('dark-mode', darkSwitch.checked);
-    localStorage.setItem('darkMode', darkSwitch.checked);
-});
-if(localStorage.getItem('darkMode')==='true'){
-    document.body.classList.add('dark-mode');
-    darkSwitch.checked = true;
-}
-
-// Language
-document.getElementById('langSelect').addEventListener('change',(e)=>{
-    updateLanguage(e.target.value);
-});
-
-function updateLanguage(lang){
-    Object.keys(translations[lang]).forEach(id=>{
-        const el = document.getElementById(id);
-        if(el) el.innerText = translations[lang][id];
-    });
-    document.getElementById('exportCSVBtn').innerText = translations[lang].btnExportCSV;
-    document.getElementById('exportJSONBtn').innerText = translations[lang].btnExportJSON;
-    updateChart();
+// Sorting
+function sortTable(n) {
+    const table = document.getElementById('transportTable');
+    let switching = true;
+    let dir = 'asc';
+    while (switching) {
+        switching = false;
+        let rows = table.rows;
+        for (let i = 1; i < rows.length-2; i++) {
+            let x = rows[i].cells[n].innerText.toLowerCase();
+            let y = rows[i+1].cells[n].innerText.toLowerCase();
+            if (n===0){x=rows[i].cells[n].innerText; y=rows[i+1].cells[n].innerText;}
+            let shouldSwitch = false;
+            if (dir=="asc" && x>y){shouldSwitch=true; break;}
+            if (dir=="desc" && x<y){shouldSwitch=true; break;}
+        }
+        if (shouldSwitch){
+            rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
+            switching = true;
+        } else if (dir=="asc"){dir="desc"; switching=true;}
+    }
+    updateTable();
 }
 
 // Chart
 let chart;
-function updateChart(){
-    const labels = Array.from(document.querySelectorAll('#transportTable tbody tr td:first-child')).map(td=>td.innerText);
-    const data = Array.from(document.querySelectorAll('#transportTable tbody tr .co2Result')).map(td=>parseFloat(td.innerText)||0);
-    const chartLabel = translations[document.getElementById('langSelect').value].chartLabel;
-
-    if(chart){
-        chart.data.labels = labels;
-        chart.data.datasets[0].data = data;
-        chart.data.datasets[0].label = chartLabel;
-        chart.update();
-    } else {
-        const ctx = document.getElementById('chartContainer').getContext('2d');
-        chart = new Chart(ctx,{
-            type:'bar',
-            data:{ labels, datasets:[{ label: chartLabel, data, backgroundColor:'#4caf50' }]},
-            options:{ responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true }}}
-        });
-    }
-}
-
-// LocalStorage
-function saveLocalStorage(){
-    const data = [];
-    document.querySelectorAll('#transportTable tbody tr').forEach(tr=>{
-        const distance = parseFloat(tr.querySelector('input[type="number"]:not([step])').value)||0;
-        const factor = parseFloat(tr.querySelector('input[type="number"][step]').value)||0;
-        data.push({distance,factor});
+function updateChart(labels, data){
+    const ctx = document.getElementById('co2Chart').getContext('2d');
+    if(chart) chart.destroy();
+    chart = new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets:[{ label:'CO₂ (kg)', data, backgroundColor: 'rgba(75,192,192,0.6)' }] },
+        options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true } } }
     });
-    localStorage.setItem('bilanData', JSON.stringify(data));
 }
 
-function loadLocalStorage(){
-    const data = JSON.parse(localStorage.getItem('bilanData')||"[]");
-    if(data.length){
-        document.querySelectorAll('#transportTable tbody tr').forEach((tr,i)=>{
-            if(data[i]){
-                tr.querySelector('input[type="number"]:not([step])').value = data[i].distance;
-                tr.querySelector('input[type="number"][step]').value = data[i].factor;
-                calculateRow(tr.querySelector('input[type="number"]:not([step])'));
-            }
-        });
-    }
-}
-
-// Tri colonnes
-document.querySelectorAll('#transportTable th').forEach((th, index)=>{
-    th.addEventListener('click', ()=>{
-        sortTable(index);
-    });
-});
-
-function sortTable(n){
-    const table = document.getElementById('transportTable');
-    let switching = true;
-    let dir = 'asc';
-    while(switching){
-        switching = false;
-        const rows = Array.from(table.tBodies[0].rows);
-        for(let i=0;i<rows.length-1;i++){
-            let shouldSwitch = false;
-            let x = rows[i].cells[n].innerText.toLowerCase();
-            let y = rows[i+1].cells[n].innerText.toLowerCase();
-            if(!isNaN(parseFloat(x)) && !isNaN(parseFloat(y))){
-                x=parseFloat(x); y=parseFloat(y);
-            }
-            if(dir==='asc' && x>y){ shouldSwitch=true; break; }
-            if(dir==='desc' && x<y){ shouldSwitch=true; break; }
-            if(shouldSwitch){
-                rows[i].parentNode.insertBefore(rows[i+1], rows[i]);
-                switching=true;
-            }
-        }
-        if(!switching && dir==='asc'){ dir='desc'; switching=true; }
-    }
-}
-
-// Init
-document.getElementById('exportCSVBtn').addEventListener('click', exportCSV);
-document.getElementById('exportJSONBtn').addEventListener('click', exportJSON);
-
-loadLocalStorage();
-updateChart();
+window.onload = loadSaved;
 </script>
 </body>
 </html>
