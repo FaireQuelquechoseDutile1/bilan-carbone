@@ -186,8 +186,8 @@ function updateChart(){
     for(let row of document.getElementById('transportTable').tBodies[0].rows){
         const input = row.cells[1].getElementsByTagName('input')[0].value;
         if(input){
-            const nameFr = row.cells[0].getAttribute('data-fr') || row.cells[0].innerText;
-            labels.push(translations[lang][nameFr] || row.cells[0].innerText);
+            const key = row.cells[0].getAttribute('data-fr'); // toujours la clé FR
+            labels.push(translations[lang][key] || key);
             data.push(parseFloat(row.cells[2].innerText));
         }
     }
@@ -252,14 +252,9 @@ function getTableData(){
 function changeLanguage(){
     const lang = document.getElementById('languageSelect').value;
     document.querySelectorAll('[data-fr]').forEach(el=>{
-        const key = el.getAttribute('data-fr');
-        el.innerText = translations[lang][key];
+        const key = el.getAttribute('data-fr'); // clé FR toujours
+        el.innerText = translations[lang][key] || key;
     });
-    // Traduire contenu des lignes
-    for(let row of document.getElementById('transportTable').tBodies[0].rows){
-        const nameFr = row.cells[0].getAttribute('data-fr') || row.cells[0].innerText;
-        row.cells[0].innerText = translations[lang][nameFr] || row.cells[0].innerText;
-    }
     updateChart(); // Met à jour le graphique après le changement de langue
 }
 
