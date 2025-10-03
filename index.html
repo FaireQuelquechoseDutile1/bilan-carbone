@@ -27,7 +27,7 @@ button { margin: 5px; }
     <option value="en">English</option>
 </select>
 
-<label for="darkSwitch">Dark Mode:</label>
+<label for="darkSwitch">Mode sombre:</label>
 <input type="checkbox" id="darkSwitch" onchange="toggleDarkMode(this.checked)">
 
 <table id="transportTable">
@@ -68,8 +68,8 @@ button { margin: 5px; }
 
 <button onclick="exportCSV()">Exporter CSV</button>
 <button onclick="exportJSON()">Exporter JSON</button>
-<button onclick="resetCoefficients()">Reset coefficients</button>
-<button onclick="resetDistances()">Reset Distance</button>
+<button onclick="resetCoefficients()">Re initialiser les coefficients</button>
+<button onclick="resetDistances()">Re initialiser la distance</button>
 
 <div id="chartContainer">
     <canvas id="co2Chart"></canvas>
@@ -100,6 +100,26 @@ const translations = {
         "Construction (kg CO₂)":"Construction (kg CO₂)", "Coefficient d'usage":"Usage coefficient", "Total":"Total"
     },
     fr: {} // inverse automatiquement
+};
+
+// Ajout des traductions pour les boutons et labels
+const uiTranslations = {
+    en: {
+        "Exporter CSV": "Export CSV",
+        "Exporter JSON": "Export JSON",
+        "Re initialiser les coefficients": "Reset coefficients",
+        "Re initialiser la distance": "Reset distance",
+        "Langue:": "Language:",
+        "Mode sombre:": "Dark Mode:"
+    },
+    fr: {
+        "Export CSV": "Exporter CSV",
+        "Export JSON": "Exporter JSON",
+        "Reset coefficients": "Re initialiser les coefficients",
+        "Reset distance": "Re initialiser la distance",
+        "Language:": "Langue:",
+        "Dark Mode:": "Mode sombre:"
+    }
 };
 for(let k in translations.en) translations.fr[translations.en[k]]=k;
 
@@ -171,6 +191,7 @@ function updateChart(labels, data){
 
 // Traduction
 function changeLanguage(lang){
+    // Traduction du tableau
     document.querySelectorAll("#transportTable tbody tr").forEach(row=>{
         const key=row.cells[0].innerText;
         if(translations[lang][key]) row.cells[0].innerText=translations[lang][key];
@@ -178,12 +199,16 @@ function changeLanguage(lang){
     document.querySelectorAll("#transportTable th, #transportTable tfoot th").forEach(th=>{
         if(translations[lang][th.innerText]) th.innerText=translations[lang][th.innerText];
     });
-    updateTable();
-}
 
-// Dark mode
-function toggleDarkMode(enable){
-    document.body.classList.toggle('dark-mode', enable);
+    // Traduction des boutons et labels
+    document.querySelectorAll("button").forEach(btn=>{
+        if(uiTranslations[lang][btn.innerText]) btn.innerText = uiTranslations[lang][btn.innerText];
+    });
+    document.querySelectorAll("label").forEach(lbl=>{
+        if(uiTranslations[lang][lbl.innerText]) lbl.innerText = uiTranslations[lang][lbl.innerText];
+    });
+
+    updateTable();
 }
 
 // LocalStorage
