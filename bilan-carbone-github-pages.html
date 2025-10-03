@@ -16,14 +16,19 @@
 </style>
 </head>
 <body>
-<h1>Bilan Carbone des Déplacements</h1>
+<h1 id="pageTitle">Bilan Carbone des Déplacements</h1>
+<label for="langSelect">Langue :</label>
+<select id="langSelect" onchange="updateLanguage()">
+    <option value="fr">Français</option>
+    <option value="en">English</option>
+</select>
 <table id="transportTable">
     <thead>
         <tr>
-            <th onclick="sortTable(0)">Moyen de transport</th>
-            <th>Distance (km)</th>
-            <th>Émissions CO₂ (kg)</th>
-            <th>Fabrication / Entretien (kg CO₂)</th>
+            <th id="thTransport" onclick="sortTable(0)">Moyen de transport</th>
+            <th id="thDistance" onclick="sortTable(1)">Distance (km)</th>
+            <th id="thEmissions" onclick="sortTable(2)">Émissions CO₂ (kg)</th>
+            <th id="thFabrication" onclick="sortTable(3)">Fabrication / Entretien (kg CO₂)</th>
         </tr>
     </thead>
     <tbody>
@@ -39,13 +44,13 @@
         <tr><td>Tram</td><td><input type="number" onchange="updateTable()"></td><td>0</td><td>30</td></tr>
     </tbody>
 </table>
-<p>Total CO₂ : <span id="totalCO2">0</span> kg</p>
-<label for="exportType">Type d’export :</label>
+<p id="totalLabel">Total CO₂ : <span id="totalCO2">0</span> kg</p>
+<label for="exportType" id="exportLabel">Type d’export :</label>
 <select id="exportType">
     <option value="csv">CSV</option>
     <option value="json">JSON</option>
 </select>
-<button onclick="exportData()">Exporter</button>
+<button onclick="exportData()" id="exportBtn">Exporter</button>
 <canvas id="chartContainer"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -60,6 +65,29 @@ const factors = {
     'Trottinette': 0,
     'Trottinette électrique': 0.01,
     'Tram': 0.03
+};
+
+const translations = {
+    fr: {
+        pageTitle: "Bilan Carbone des Déplacements",
+        thTransport: "Moyen de transport",
+        thDistance: "Distance (km)",
+        thEmissions: "Émissions CO₂ (kg)",
+        thFabrication: "Fabrication / Entretien (kg CO₂)",
+        totalLabel: "Total CO₂",
+        exportLabel: "Type d’export :",
+        exportBtn: "Exporter"
+    },
+    en: {
+        pageTitle: "Transport Carbon Footprint",
+        thTransport: "Transport method",
+        thDistance: "Distance (km)",
+        thEmissions: "CO₂ Emissions (kg)",
+        thFabrication: "Manufacturing / Maintenance (kg CO₂)",
+        totalLabel: "Total CO₂",
+        exportLabel: "Export type:",
+        exportBtn: "Export"
+    }
 };
 
 function updateTable() {
@@ -134,8 +162,25 @@ function updateChart() {
     const ctx = document.getElementById('chartContainer').getContext('2d');
     window.myChart = new Chart(ctx, {
         type: 'bar',
-        data: { labels: labels, datasets: [{ label: 'Émissions CO₂ (kg)', data: data, backgroundColor: 'rgba(0, 122, 204, 0.7)' }] },
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'CO₂ émis (kg)',
+                data: data,
+                backgroundColor: 'rgba(0, 122, 204, 0.7)'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'CO₂ (kg)' } },
+                x: { title: { display: true, text: 'Transport' } }
+            }
+        }
     });
 }
 
@@ -145,13 +190,16 @@ function sortTable(n) {
     let dir = 'asc';
     while (switching) {
         switching = false;
-        const rows = table.rows;
+        let rows = table.rows;
         for (let i = 1; i < rows.length - 1; i++) {
             let shouldSwitch = false;
             let x = rows[i].cells[n].innerText;
             let y = rows[i + 1].cells[n].innerText;
-            if (!isNaN(x) && !isNaN(y)) { x = parseFloat(x); y = parseFloat(y); }
-            if ((dir === 'asc' && x > y) || (dir === 'desc' && x < y)) {
+            if (!isNaN(parseFloat(x)) && !isNaN(parseFloat(y))) {
+                x = parseFloat(x);
+                y = parseFloat(y);
+            }
+            if (dir === 'asc' ? x > y : x < y) {
                 shouldSwitch = true;
                 break;
             }
@@ -166,7 +214,15 @@ function sortTable(n) {
     }
 }
 
-window.onload = loadLocalStorage;
-</script>
-</body>
-</html>
+function updateLanguage() {
+    const lang = document.getElementById('langSelect').value;
+    for (let key in translations[lang]) {
+        const el = document.getElementById(key);
+        if (el) el.innerText = translations[lang][key];
+    }
+}
+
+window.onload = function() {
+    loadLocalStorage();
+    updateLanguage();
+};
